@@ -1,86 +1,549 @@
-<script>
-    // Standardized the array name to 'corrections'
-    let corrections = [
-        {ticker:"MSFT", mistake:"Called BULLISH/BUY ignoring TREND-GUARD", correction:"TREND-GUARD caps at 45 for Death Cross", time:"Today"},
-        {ticker:"TSLA", mistake:"Missed VALUATION-GUARD (P/E > 80)", correction:"P/E > 80 forces HIGH risk", time:"Today"},
-        {ticker:"SOFI", mistake:"Showed raw AI output", correction:"System applies guards post-processing", time:"Today"}
-    ];
-    let stats = {total:11, rules:4, accuracy:15, days:81};
-
-    window.onload = function() {
-        loadData();
-        updateDashboard();
-    };
-
-    function loadData() {
-        try {
-            const saved = localStorage.getItem('utData');
-            if(saved){
-                const data = JSON.parse(saved);
-                corrections = data.corrections || corrections;
-                stats = data.stats || stats;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Thread AI Training Dashboard</title>
+    <meta name="description" content="Professional AI training platform for institutional-grade stock analysis">
+    
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --secondary: #475569;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --error: #ef4444;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --gradient: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --radius: 0.5rem;
+            --radius-lg: 1rem;
+            --space-1: 0.25rem;
+            --space-2: 0.5rem;
+            --space-3: 0.75rem;
+            --space-4: 1rem;
+            --space-6: 1.5rem;
+            --space-8: 2rem;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-900);
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 var(--space-4);
+        }
+        
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--gray-200);
+            padding: var(--space-4) 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: var(--shadow);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.25rem;
+        }
+        
+        .logo-text {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .logo-text span {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .main {
+            padding: var(--space-8) 0;
+        }
+        
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(12, 1fr);
+            gap: var(--space-6);
+        }
+        
+        @media (max-width: 1024px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
             }
-        } catch(e) {
-            console.error("Error loading data", e);
         }
-    } // <-- Added missing closing brace here
-
-    function saveData() {
-        const data = {corrections: corrections, stats: stats, saved: new Date().toISOString()};
-        localStorage.setItem('utData', JSON.stringify(data));
-    }
-
-    function saveCorection() {
-        const ticker = document.getElementById('ticker').value.trim().toUpperCase();
-        const mistake = document.getElementById('mistake').value.trim();
-        const correction = document.getElementById('corection').value.trim();
         
-        if(!ticker || !mistake || !correction) {
-            alert('Please fill all fields');
-            return;
+        .progress-card {
+            grid-column: span 8;
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            box-shadow: var(--shadow);
         }
-
-        corrections.unshift({ticker: ticker, mistake: mistake, correction: correction, time: 'Just now'});
-        stats.total++;
-        updateDashboard();
-        saveData();
-        clearForm();
-        alert(`✅ ${ticker} saved! Total: ${stats.total}/100`);
-    }
-
-    function clearForm() {
-        // Fixed the unclosed strings here
-        document.getElementById('ticker').value = '';
-        document.getElementById('mistake').value = '';
-        document.getElementById('corection').value = '';
-    }
-
-    function updateDashboard() {
-        const progress = Math.min(100, (stats.total / 100) * 100);
-        document.getElementById('progress').style.width = progress + '%';
-        document.getElementById('progress').textContent = stats.total + '/100';
-        document.getElementById('total').textContent = stats.total;
-        document.getElementById('rules').textContent = stats.rules;
-        document.getElementById('accuracy').textContent = stats.accuracy + '%';
-        document.getElementById('days').textContent = stats.days;
         
-        const container = document.getElementById('recent-corections');
-        container.innerHTML = ''; // Fixed the unclosed string here
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-6);
+        }
         
-        corrections.slice(0,3).forEach(corr => {
-            const div = document.createElement('div');
-            div.className = 'corection'; // Keeping your CSS class name
-            // Fixed the variable references from 'cor' to 'corr'
-            div.innerHTML = `
-                <div class="corection-header">
-                    <div class="ticker">$${corr.ticker}</div>
-                    <div class="time">${corr.time}</div>
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: var(--space-1) var(--space-3);
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border-radius: var(--radius);
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+        
+        .progress-container {
+            margin: var(--space-6) 0;
+        }
+        
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+            font-size: 0.875rem;
+            color: var(--gray-500);
+        }
+        
+        .progress-bar {
+            height: 12px;
+            background: var(--gray-200);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient);
+            border-radius: var(--radius);
+            transition: width 0.6s ease;
+        }
+        
+        .stats-grid {
+            grid-column: span 4;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-4);
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-4);
+            box-shadow: var(--shadow);
+            text-align: center;
+            transition: transform 0.2s;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-2px);
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--gray-100);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto var(--space-3);
+            color: var(--primary);
+            font-size: 1.25rem;
+        }
+        
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: var(--space-1);
+        }
+        
+        .stat-label {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+        
+        .form-card {
+            grid-column: span 8;
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            box-shadow: var(--shadow);
+        }
+        
+        .form-group {
+            margin-bottom: var(--space-4);
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: var(--space-2);
+            font-weight: 500;
+            color: var(--gray-700);
+            font-size: 0.875rem;
+        }
+        
+        .form-input,
+        .form-textarea,
+        .form-select {
+            width: 100%;
+            padding: var(--space-3) var(--space-4);
+            border: 1px solid var(--gray-300);
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.2s;
+        }
+        
+        .form-input:focus,
+        .form-textarea:focus,
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+        
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        .form-select {
+            appearance: none;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right var(--space-3) center;
+            background-size: 1.5em;
+            padding-right: var(--space-8);
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: var(--space-3);
+            margin-top: var(--space-6);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: var(--space-3) var(--space-6);
+            border: none;
+            border-radius: var(--radius);
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            gap: var(--space-2);
+        }
+        
+        .btn-primary {
+            background: var(--gradient);
+            color: white;
+            flex: 2;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+        
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+            border: 1px solid var(--gray-300);
+            flex: 1;
+        }
+        
+        .btn-secondary:hover {
+            background: var(--gray-200);
+        }
+        
+        .recent-card {
+            grid-column: span 4;
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: var(--space-6);
+            box-shadow: var(--shadow);
+        }
+        
+        .corrections-list {
+            display: flex;
+            flex-direction: column;
+            gap: var(--space-4);
+        }
+        
+        .correction-item {
+            background: var(--gray-50);
+            border-radius: var(--radius);
+            padding: var(--space-4);
+            border-left: 3px solid var(--primary);
+            transition: transform 0.2s;
+        }
+        
+        .correction-item:hover {
+            transform: translateX(2px);
+        }
+        
+        .correction-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: var(--space-2);
+        }
+        
+        .ticker {
+            font-weight: 600;
+            color: var(--primary);
+            font-size: 0.875rem;
+        }
+        
+        .time {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+        }
+        
+        .correction-content {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+        }
+        
+        .footer {
+            background: var(--gray-900);
+            color: var(--gray-400);
+            padding: var(--space-8) 0;
+            margin-top: var(--space-8);
+        }
+        
+        .footer-content {
+            text-align: center;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: var(--space-6);
+            right: var(--space-6);
+            background: white;
+            color: var(--gray-900);
+            padding: var(--space-4);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--space-3);
+            z-index: 1000;
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s;
+            max-width: 400px;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--gradient);
+            border-radius: var(--radius);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .progress-card,
+            .form-card,
+            .recent-card {
+                grid-column: 1;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .form-actions {
+                flex-direction: column;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <a href="#" class="logo">
+                    <div class="logo-icon">🏢</div>
+                    <div class="logo-text">Urban Thread <span>AI Training</span></div>
+                </a>
+                <div class="header-actions">
+                    <button class="btn btn-secondary" onclick="exportData()">
+                        📥 Export
+                    </button>
                 </div>
-                <div class="corection-content">
-                    <p><strong>Mistake:</strong> ${corr.mistake}</p>
-                    <p><strong>Correction:</strong> ${corr.correction}</p>
-                </div>`;
-            container.appendChild(div);
-        });
-    }
-</script>
+            </div>
+        </div>
+    </header>
+
+    <main class="main">
+        <div class="container">
+            <div class="dashboard-grid">
+                <div class="progress-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Progress to Institutional-Grade AI</h2>
+                        <div class="badge">Goal: 100 Corrections</div>
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-info">
+                            <span>Current: <strong id="current-count">11</strong> corrections</span>
+                            <span>Target: 100 corrections</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-bar" style="width: 11%"></div>
+                        </div>
+                    </div>
+                    
+                    <p style="color: var(--gray-500); margin-top: var(--space-4);">
+                        Each expert correction trains the AI. Target: 100 corrections for institutional-grade performance.
+                    </p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">📊</div>
+                        <div class="stat-value" id="total-corrections">11</div>
+                        <div class="stat-label">Total Corrections</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🎓</div>
+                        <div class="stat-value" id="rules-learned">4</div>
+                        <div class="stat-label">Rules Learned</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📈</div>
+                        <div class="stat-value" id="accuracy-gain">15%</div>
+                        <div class="stat-label">Accuracy Gain</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">📅</div>
+                        <div class="stat-value" id="days-to-goal">81</div>
+                        <div class="stat-label">Days to Goal</div>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <div class="card-header">
+                        <h2 class="card-title">Capture New Correction</h2>
+                    </div>
+                    
+                    <form id="correction-form">
+                        <div class="form-group">
+                            <label for="ticker" class="form-label">Ticker Symbol</label>
+                            <input type="text" id="ticker" class="form-input" placeholder="AAPL, TSLA, MSFT, NVDA" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="rule-type" class="form-label">Rule Category</label>
+                            <select id="rule-type" class="form-select">
+                                <option value="">Select rule category</option>
+                                <option value="TREND-GUARD">TREND-GUARD</option>
+                                <option value="VALUATION-GUARD">VALUATION-GUARD</option>
+                                <option value="D/E Context">D/E Context</option>
+                                <option value="System Architecture">System Architecture</option>
+                                <option value="Risk Calibration">Risk Calibration</option>
+                                <option value="General">General Rule</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="mistake" class="form-label">AI's Mistake</label>
+                            <textarea id="mistake" class="form-textarea" placeholder="Describe what the AI got wrong..." required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="correction" class="form-label">Your Correction</label>
+                            <textarea id="correction" class="form-textarea" placeholder="Provide the correct analysis with specific rules..." required></textarea>
+                        </div>
+                        
+                        <div class
