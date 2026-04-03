@@ -1,549 +1,160 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Urban Thread AI Training Dashboard</title>
-    <meta name="description" content="Professional AI training platform for institutional-grade stock analysis">
-    
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-dark: #1e40af;
-            --secondary: #475569;
-            --success: #10b981;
-            --warning: #f59e0b;
-            --error: #ef4444;
-            --gray-50: #f9fafb;
-            --gray-100: #f3f4f6;
-            --gray-200: #e5e7eb;
-            --gray-300: #d1d5db;
-            --gray-400: #9ca3af;
-            --gray-500: #6b7280;
-            --gray-600: #4b5563;
-            --gray-700: #374151;
-            --gray-800: #1f2937;
-            --gray-900: #111827;
-            --gradient: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            --radius: 0.5rem;
-            --radius-lg: 1rem;
-            --space-1: 0.25rem;
-            --space-2: 0.5rem;
-            --space-3: 0.75rem;
-            --space-4: 1rem;
-            --space-6: 1.5rem;
-            --space-8: 2rem;
-        }
+<!DOCTYPE html> <html lang="en"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Urban Thread AI Training Dashboard</title> <style> * { margin: 0; padding: 0; box-sizing: border-box; } body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f9fafb; color: #111827; line-height: 1.5; padding: 2rem; max-width: 1200px; margin: 0 auto; } .header { text-align: center; margin-bottom: 2rem; } .logo { font-size: 2rem; font-weight: 700; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; margin-bottom: 0.5rem; } .subtitle { color: #374151; font-size: 1.1rem; } .container { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; } @media (max-width: 768px) { .container { grid-template-columns: 1fr; } } .card { background: white; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); } .card-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; color: #111827; } .input-group { margin-bottom: 1rem; } .input-label { display: block; margin-bottom: 0.5rem; font-weight: 500; color: #374151; } .input-field { width: 100%; padding: 10px 15px; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem; font-family: inherit; } .input-field:focus { outline: none; border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1); } .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border: none; border-radius: 0.5rem; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.2s; gap: 8px; } .btn-primary { background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); color: white; } .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1); } .btn-secondary { background: #f3f4f6; color: #374151; border: 1px solid #d1d5db; } .btn-secondary:hover { background: #e5e7eb; } .analysis-box { background: #f3f4f6; border-radius: 0.5rem; padding: 1rem; margin-top: 1rem; border-left: 4px solid #2563eb; } .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #d1d5db; border-top: 3px solid #2563eb; border-radius: 50%; animation: spin 1s linear infinite; } @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } .progress-container { margin: 1.5rem 0; } .progress-bar { height: 12px; background: #e5e7eb; border-radius: 0.5rem; overflow: hidden; margin-bottom: 0.5rem; } .progress-fill { height: 100%; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); border-radius: 0.5rem; transition: width 0.6s ease; } .progress-info { display: flex; justify-content: space-between; font-size: 0.875rem; color: #374151; } .hidden { display: none; } .toast { position: fixed; bottom: 20px; right: 20px; background: white; color: #111827; padding: 1rem; border-radius: 0.5rem; box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1); display: flex; align-items: center; gap: 1rem; z-index: 1000; transform: translateY(100px); opacity: 0; transition: all 0.3s; max-width: 400px; } .toast.show { transform: translateY(0); opacity: 1; } .toast-icon { width: 40px; height: 40px; background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%); border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.2rem; } </style> </head> <body> <header class="header"> <div class="logo">🏢 Urban Thread AI Training</div> <div class="subtitle">Institutional-Grade Stock Analysis Training Platform</div> </header>
+<div class="progress-container">
+    <div class="progress-info">
+        <span>Progress: <strong id="current-count">11</strong>/100 corrections</span>
+        <span>Goal: Institutional-Grade AI</span>
+    </div>
+    <div class="progress-bar">
+        <div class="progress-fill" id="progress-bar" style="width: 11%"></div>
+    </div>
+</div>
+
+<div class="container">
+    <div class="card">
+        <h2 class="card-title">📈 Analyze Stock with Rex</h2>
+        <div class="input-group">
+            <label class="input-label">Enter Ticker Symbol</label>
+            <input type="text" id="tickerInput" class="input-field" placeholder="AAPL, TSLA, NVDA, MSFT" value="NVDA">
+        </div>
         
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        <button class="btn btn-primary" onclick="analyzeStock()" style="width: 100%;">
+            <span id="analyze-text">Run Rex Analysis</span>
+            <span id="analyze-loading" class="loading hidden"></span>
+        </button>
         
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: var(--gray-50);
-            color: var(--gray-900);
-            line-height: 1.5;
-            min-height: 100vh;
-        }
-        
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            padding: 0 var(--space-4);
-        }
-        
-        .header {
-            background: white;
-            border-bottom: 1px solid var(--gray-200);
-            padding: var(--space-4) 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: var(--shadow);
-        }
-        
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            text-decoration: none;
-        }
-        
-        .logo-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient);
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.25rem;
-        }
-        
-        .logo-text {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--gray-900);
-        }
-        
-        .logo-text span {
-            background: var(--gradient);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-        
-        .main {
-            padding: var(--space-8) 0;
-        }
-        
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: repeat(12, 1fr);
-            gap: var(--space-6);
-        }
-        
-        @media (max-width: 1024px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        .progress-card {
-            grid-column: span 8;
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: var(--space-6);
-            box-shadow: var(--shadow);
-        }
-        
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: var(--space-6);
-        }
-        
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            color: var(--gray-900);
-        }
-        
-        .badge {
-            display: inline-flex;
-            align-items: center;
-            padding: var(--space-1) var(--space-3);
-            background: var(--gray-100);
-            color: var(--gray-700);
-            border-radius: var(--radius);
-            font-size: 0.875rem;
-            font-weight: 500;
-        }
-        
-        .progress-container {
-            margin: var(--space-6) 0;
-        }
-        
-        .progress-info {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: var(--space-2);
-            font-size: 0.875rem;
-            color: var(--gray-500);
-        }
-        
-        .progress-bar {
-            height: 12px;
-            background: var(--gray-200);
-            border-radius: var(--radius);
-            overflow: hidden;
-        }
-        
-        .progress-fill {
-            height: 100%;
-            background: var(--gradient);
-            border-radius: var(--radius);
-            transition: width 0.6s ease;
-        }
-        
-        .stats-grid {
-            grid-column: span 4;
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: var(--space-4);
-        }
-        
-        .stat-card {
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: var(--space-4);
-            box-shadow: var(--shadow);
-            text-align: center;
-            transition: transform 0.2s;
-        }
-        
-        .stat-card:hover {
-            transform: translateY(-2px);
-        }
-        
-        .stat-icon {
-            width: 48px;
-            height: 48px;
-            background: var(--gray-100);
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto var(--space-3);
-            color: var(--primary);
-            font-size: 1.25rem;
-        }
-        
-        .stat-value {
-            font-size: 2rem;
-            font-weight: 700;
-            color: var(--gray-900);
-            margin-bottom: var(--space-1);
-        }
-        
-        .stat-label {
-            font-size: 0.875rem;
-            color: var(--gray-500);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-        
-        .form-card {
-            grid-column: span 8;
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: var(--space-6);
-            box-shadow: var(--shadow);
-        }
-        
-        .form-group {
-            margin-bottom: var(--space-4);
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: var(--space-2);
-            font-weight: 500;
-            color: var(--gray-700);
-            font-size: 0.875rem;
-        }
-        
-        .form-input,
-        .form-textarea,
-        .form-select {
-            width: 100%;
-            padding: var(--space-3) var(--space-4);
-            border: 1px solid var(--gray-300);
-            border-radius: var(--radius);
-            font-size: 1rem;
-            font-family: inherit;
-            transition: all 0.2s;
-        }
-        
-        .form-input:focus,
-        .form-textarea:focus,
-        .form-select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
-        }
-        
-        .form-textarea {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        .form-select {
-            appearance: none;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right var(--space-3) center;
-            background-size: 1.5em;
-            padding-right: var(--space-8);
-        }
-        
-        .form-actions {
-            display: flex;
-            gap: var(--space-3);
-            margin-top: var(--space-6);
-        }
-        
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: var(--space-3) var(--space-6);
-            border: none;
-            border-radius: var(--radius);
-            font-size: 1rem;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            gap: var(--space-2);
-        }
-        
-        .btn-primary {
-            background: var(--gradient);
-            color: white;
-            flex: 2;
-        }
-        
-        .btn-primary:hover {
-            transform: translateY(-1px);
-            box-shadow: var(--shadow-md);
-        }
-        
-        .btn-secondary {
-            background: var(--gray-100);
-            color: var(--gray-700);
-            border: 1px solid var(--gray-300);
-            flex: 1;
-        }
-        
-        .btn-secondary:hover {
-            background: var(--gray-200);
-        }
-        
-        .recent-card {
-            grid-column: span 4;
-            background: white;
-            border-radius: var(--radius-lg);
-            padding: var(--space-6);
-            box-shadow: var(--shadow);
-        }
-        
-        .corrections-list {
-            display: flex;
-            flex-direction: column;
-            gap: var(--space-4);
-        }
-        
-        .correction-item {
-            background: var(--gray-50);
-            border-radius: var(--radius);
-            padding: var(--space-4);
-            border-left: 3px solid var(--primary);
-            transition: transform 0.2s;
-        }
-        
-        .correction-item:hover {
-            transform: translateX(2px);
-        }
-        
-        .correction-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: var(--space-2);
-        }
-        
-        .ticker {
-            font-weight: 600;
-            color: var(--primary);
-            font-size: 0.875rem;
-        }
-        
-        .time {
-            font-size: 0.75rem;
-            color: var(--gray-500);
-        }
-        
-        .correction-content {
-            font-size: 0.875rem;
-            color: var(--gray-600);
-        }
-        
-        .footer {
-            background: var(--gray-900);
-            color: var(--gray-400);
-            padding: var(--space-8) 0;
-            margin-top: var(--space-8);
-        }
-        
-        .footer-content {
-            text-align: center;
-        }
-        
-        .toast {
-            position: fixed;
-            bottom: var(--space-6);
-            right: var(--space-6);
-            background: white;
-            color: var(--gray-900);
-            padding: var(--space-4);
-            border-radius: var(--radius);
-            box-shadow: var(--shadow-lg);
-            display: flex;
-            align-items: center;
-            gap: var(--space-3);
-            z-index: 1000;
-            transform: translateY(100px);
-            opacity: 0;
-            transition: all 0.3s;
-            max-width: 400px;
-        }
-        
-        .toast.show {
-            transform: translateY(0);
-            opacity: 1;
-        }
-        
-        .toast-icon {
-            width: 40px;
-            height: 40px;
-            background: var(--gradient);
-            border-radius: var(--radius);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1.2rem;
-        }
-        
-        @media (max-width: 768px) {
-            .dashboard-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .progress-card,
-            .form-card,
-            .recent-card {
-                grid-column: 1;
-            }
-            
-            .stats-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            
-            .form-actions {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .stats-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header class="header">
-        <div class="container">
-            <div class="header-content">
-                <a href="#" class="logo">
-                    <div class="logo-icon">🏢</div>
-                    <div class="logo-text">Urban Thread <span>AI Training</span></div>
-                </a>
-                <div class="header-actions">
-                    <button class="btn btn-secondary" onclick="exportData()">
-                        📥 Export
-                    </button>
-                </div>
+        <div id="analysisResult" class="hidden">
+            <div class="analysis-box">
+                <h3 style="margin-bottom: 10px;">🤖 AI Analysis Result</h3>
+                <div id="analysisContent"></div>
+                <button class="btn btn-secondary" onclick="showCorrectionForm()" style="margin-top: 15px;">
+                    ✏️ Spot an Error? Correct AI
+                </button>
             </div>
         </div>
-    </header>
+    </div>
+    
+    <div class="card">
+        <h2 class="card-title">✏️ Capture Correction</h2>
+        <div id="correctionForm" class="hidden">
+            <div class="input-group">
+                <label class="input-label">Ticker</label>
+                <input type="text" id="correctionTicker" class="input-field" readonly>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Rule Category</label>
+                <select id="ruleType" class="input-field">
+                    <option value="">Select rule category</option>
+                    <option value="TREND-GUARD">TREND-GUARD</option>
+                    <option value="VALUATION-GUARD">VALUATION-GUARD</option>
+                    <option value="D/E Context">D/E Context</option>
+                    <option value="System Architecture">System Architecture</option>
+                    <option value="Risk Calibration">Risk Calibration</option>
+                </select>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">AI's Mistake</label>
+                <textarea id="mistake" class="input-field" rows="3" placeholder="Describe what the AI got wrong..."></textarea>
+            </div>
+            
+            <div class="input-group">
+                <label class="input-label">Your Correction</label>
+                <textarea id="correction" class="input-field" rows="3" placeholder="Provide the correct analysis with specific rules..."></textarea>
+            </div>
+            
+            <button class="btn btn-primary" onclick="saveCorrection()" style="width: 100%; margin-top: 1rem;">
+                💾 Save Correction
+            </button>
+        </div>
+        
+        <div id="noAnalysisMessage">
+            <p style="color: #374151; text-align: center; padding: 20px;">
+                First analyze a stock using Rex, then correct any errors here.
+            </p>
+        </div>
+    </div>
+</div>
 
-    <main class="main">
-        <div class="container">
-            <div class="dashboard-grid">
-                <div class="progress-card">
-                    <div class="card-header">
-                        <h2 class="card-title">Progress to Institutional-Grade AI</h2>
-                        <div class="badge">Goal: 100 Corrections</div>
-                    </div>
-                    
-                    <div class="progress-container">
-                        <div class="progress-info">
-                            <span>Current: <strong id="current-count">11</strong> corrections</span>
-                            <span>Target: 100 corrections</span>
-                        </div>
-                        <div class="progress-bar">
-                            <div class="progress-fill" id="progress-bar" style="width: 11%"></div>
-                        </div>
-                    </div>
-                    
-                    <p style="color: var(--gray-500); margin-top: var(--space-4);">
-                        Each expert correction trains the AI. Target: 100 corrections for institutional-grade performance.
-                    </p>
+<div style="text-align: center; margin-top: 1.5rem;">
+    <button class="btn btn-secondary" onclick="exportData()">
+        📥 Export All Corrections
+    </button>
+</div>
+
+<div id="toast" class="toast">
+    <div class="toast-icon">✅</div>
+    <div>
+        <div id="toast-title" style="font-weight: 600;"></div>
+        <div id="toast-message" style="font-size: 0.875rem;"></div>
+    </div>
+</div>
+
+<script>
+    let corrections = JSON.parse(localStorage.getItem('utCorrections') || '[]');
+    let currentTicker = '';
+    
+    function showToast(title, message) {
+        document.getElementById('toast-title').textContent = title;
+        document.getElementById('toast-message').textContent = message;
+        document.getElementById('toast').classList.add('show');
+        setTimeout(() => document.getElementById('toast').classList.remove('show'), 3000);
+    }
+    
+    function updateProgress() {
+        const count = corrections.length;
+        document.getElementById('current-count').textContent = count;
+        document.getElementById('progress-bar').style.width = count + '%';
+    }
+    
+    function loadRecentCorrections() {
+        const container = document.getElementById('recentCorrections');
+        if (!container) return;
+        
+        if (corrections.length === 0) {
+            container.innerHTML = '<p style="color: #374151; text-align: center; padding: 20px;">No corrections yet. Analyze stocks and correct AI errors to build training data.</p>';
+            return;
+        }
+        
+        const recent = corrections.slice(-5).reverse();
+        container.innerHTML = recent.map(c => `
+            <div class="correction-item">
+                <div class="correction-header">
+                    <span class="correction-ticker">${c.ticker}</span>
+                    <span class="correction-time">${new Date(c.timestamp).toLocaleDateString()}</span>
                 </div>
-
-                <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">📊</div>
-                        <div class="stat-value" id="total-corrections">11</div>
-                        <div class="stat-label">Total Corrections</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">🎓</div>
-                        <div class="stat-value" id="rules-learned">4</div>
-                        <div class="stat-label">Rules Learned</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">📈</div>
-                        <div class="stat-value" id="accuracy-gain">15%</div>
-                        <div class="stat-label">Accuracy Gain</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-icon">📅</div>
-                        <div class="stat-value" id="days-to-goal">81</div>
-                        <div class="stat-label">Days to Goal</div>
-                    </div>
+                <div class="correction-rule">${c.rule}</div>
+                <div class="correction-content">
+                    <strong>Mistake:</strong> ${c.mistake.substring(0, 100)}...<br>
+                    <strong>Correction:</strong> ${c.correction.substring(0, 100)}...
                 </div>
-
-                <div class="form-card">
-                    <div class="card-header">
-                        <h2 class="card-title">Capture New Correction</h2>
-                    </div>
-                    
-                    <form id="correction-form">
-                        <div class="form-group">
-                            <label for="ticker" class="form-label">Ticker Symbol</label>
-                            <input type="text" id="ticker" class="form-input" placeholder="AAPL, TSLA, MSFT, NVDA" required>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="rule-type" class="form-label">Rule Category</label>
-                            <select id="rule-type" class="form-select">
-                                <option value="">Select rule category</option>
-                                <option value="TREND-GUARD">TREND-GUARD</option>
-                                <option value="VALUATION-GUARD">VALUATION-GUARD</option>
-                                <option value="D/E Context">D/E Context</option>
-                                <option value="System Architecture">System Architecture</option>
-                                <option value="Risk Calibration">Risk Calibration</option>
-                                <option value="General">General Rule</option>
-                            </select>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="mistake" class="form-label">AI's Mistake</label>
-                            <textarea id="mistake" class="form-textarea" placeholder="Describe what the AI got wrong..." required></textarea>
-                        </div>
-                        
-                        <div class="form-group">
-                            <label for="correction" class="form-label">Your Correction</label>
-                            <textarea id="correction" class="form-textarea" placeholder="Provide the correct analysis with specific rules..." required></textarea>
-                        </div>
-                        
-                        <div class
+            </div>
+        `).join('');
+    }
+    
+    async function analyzeStock() {
+        const ticker = document.getElementById('tickerInput').value.toUpperCase().trim();
+        if (!ticker) {
+            showToast('Error', 'Please enter a ticker symbol');
+            return;
+        }
+        
+        currentTicker = ticker;
+        document.getElementById('analyze-text').classList.add('hidden');
+        document.getElementById('analyze-loading').classList.remove('hidden');
+        
+        try {
+            await new Promise(resolve => setTimeout(resolve, 1500));
+            
+            const mockData = {
+                'NVDA': { price: '$950.02', pe: '60.5', technical: '78/100', trend: 'Bullish', recommendation: 'BUY', risk: 'HIGH', analysis: 'NVDA shows strong AI-driven growth with expanding margins. P/E elevated but justified by growth trajectory.' },
+                'TSLA': { price: '$175.50', pe: '45.2', technical: '65/100', trend: 'Neutral', recommendation: 'HOLD', risk: 'MEDIUM', analysis: 'TSLA facing margin pressure but maintaining EV leadership. Delivery growth slowing.' },
+                'AAPL': { price: '$215.80', pe: '28.3', technical: '82/100', trend: 'Bullish', recommendation: 'BUY', risk: 'LOW', analysis: 'AAPL strong ecosystem with services growth offsetting hardware slowdown.' },
+                'MSFT': { price: '$425.30', pe: '35.8', technical: '85/100', trend: 'Bullish', recommendation: 'BUY', risk: 'LOW', analysis: 'MSFT Azure growth strong, Office 365 stable, AI integration across products.' }
+            };
+            
+            const data = mockData[ticker] || {
+                price: '$XXX.XX', pe: 'XX.X', technical: 'XX/100', trend: 'Neutral', recommendation: 'HOLD', risk: 'MEDIUM',
+                analysis: `Analysis for ${ticker} would be generated by Rex AI.`
+            };
+            
