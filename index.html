@@ -1,0 +1,86 @@
+<script>
+    // Standardized the array name to 'corrections'
+    let corrections = [
+        {ticker:"MSFT", mistake:"Called BULLISH/BUY ignoring TREND-GUARD", correction:"TREND-GUARD caps at 45 for Death Cross", time:"Today"},
+        {ticker:"TSLA", mistake:"Missed VALUATION-GUARD (P/E > 80)", correction:"P/E > 80 forces HIGH risk", time:"Today"},
+        {ticker:"SOFI", mistake:"Showed raw AI output", correction:"System applies guards post-processing", time:"Today"}
+    ];
+    let stats = {total:11, rules:4, accuracy:15, days:81};
+
+    window.onload = function() {
+        loadData();
+        updateDashboard();
+    };
+
+    function loadData() {
+        try {
+            const saved = localStorage.getItem('utData');
+            if(saved){
+                const data = JSON.parse(saved);
+                corrections = data.corrections || corrections;
+                stats = data.stats || stats;
+            }
+        } catch(e) {
+            console.error("Error loading data", e);
+        }
+    } // <-- Added missing closing brace here
+
+    function saveData() {
+        const data = {corrections: corrections, stats: stats, saved: new Date().toISOString()};
+        localStorage.setItem('utData', JSON.stringify(data));
+    }
+
+    function saveCorection() {
+        const ticker = document.getElementById('ticker').value.trim().toUpperCase();
+        const mistake = document.getElementById('mistake').value.trim();
+        const correction = document.getElementById('corection').value.trim();
+        
+        if(!ticker || !mistake || !correction) {
+            alert('Please fill all fields');
+            return;
+        }
+
+        corrections.unshift({ticker: ticker, mistake: mistake, correction: correction, time: 'Just now'});
+        stats.total++;
+        updateDashboard();
+        saveData();
+        clearForm();
+        alert(`✅ ${ticker} saved! Total: ${stats.total}/100`);
+    }
+
+    function clearForm() {
+        // Fixed the unclosed strings here
+        document.getElementById('ticker').value = '';
+        document.getElementById('mistake').value = '';
+        document.getElementById('corection').value = '';
+    }
+
+    function updateDashboard() {
+        const progress = Math.min(100, (stats.total / 100) * 100);
+        document.getElementById('progress').style.width = progress + '%';
+        document.getElementById('progress').textContent = stats.total + '/100';
+        document.getElementById('total').textContent = stats.total;
+        document.getElementById('rules').textContent = stats.rules;
+        document.getElementById('accuracy').textContent = stats.accuracy + '%';
+        document.getElementById('days').textContent = stats.days;
+        
+        const container = document.getElementById('recent-corections');
+        container.innerHTML = ''; // Fixed the unclosed string here
+        
+        corrections.slice(0,3).forEach(corr => {
+            const div = document.createElement('div');
+            div.className = 'corection'; // Keeping your CSS class name
+            // Fixed the variable references from 'cor' to 'corr'
+            div.innerHTML = `
+                <div class="corection-header">
+                    <div class="ticker">$${corr.ticker}</div>
+                    <div class="time">${corr.time}</div>
+                </div>
+                <div class="corection-content">
+                    <p><strong>Mistake:</strong> ${corr.mistake}</p>
+                    <p><strong>Correction:</strong> ${corr.correction}</p>
+                </div>`;
+            container.appendChild(div);
+        });
+    }
+</script>
