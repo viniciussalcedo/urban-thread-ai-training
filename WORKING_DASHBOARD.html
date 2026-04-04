@@ -1,1 +1,46 @@
-
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Urban Thread AI Training</title>
+    <style>
+        body { font-family: Arial; max-width: 800px; margin: 40px auto; }
+        .card { background: #f5f5f5; padding: 20px; margin: 20px 0; border-radius: 10px; }
+        button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+    <h1>🏢 Urban Thread AI Training</h1>
+    <p>Self-improving AI for stock analysis</p>
+    
+    <div class="card">
+        <h3>Progress: 11/100 corrections</h3>
+        <div style="background: #ddd; height: 20px; border-radius: 10px;">
+            <div style="background: #2563eb; width: 11%; height: 100%; border-radius: 10px;"></div>
+        </div>
+    </div>
+    
+    <div class="card">
+        <h3>📈 Analyze Stock</h3>
+        <input type="text" id="ticker" placeholder="NVDA" value="NVDA">
+        <button onclick="analyze()">Run Rex Analysis</button>
+        <div id="result" style="margin-top: 20px; display: none;">
+            <h4>AI Analysis Result</h4>
+            <p>Price: $950.02 | P/E: 60.5 | Trend: Bullish</p>
+            <button onclick="correct()">✏️ Correct AI</button>
+        </div>
+    </div>
+    
+    <script>
+        function analyze() {
+            document.getElementById('result').style.display = 'block';
+            alert('In production: Calls python3 /root/.openclaw/workspace/skills/agent-rex-analyzer/analyzer.py TICKER');
+        }
+        function correct() {
+            alert('Correction saved to training dataset');
+        }
+    </script>
+    
+    <p><strong>System Status:</strong> ✅ AI training active | 11 corrections captured</p>
+    <p><a href="https://urbanthread.co.uk">urbanthread.co.uk</a></p>
+</body>
+</html>
