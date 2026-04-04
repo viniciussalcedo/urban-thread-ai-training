@@ -1,87 +1,233 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Urban Thread AI - TEST</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Thread AI Training Dashboard</title>
+    <meta name="description" content="Professional AI training platform">
     <style>
-        body { font-family: Arial; margin: 40px; }
-        .test { background: #f0f0f0; padding: 20px; margin: 10px; }
-        .pass { color: green; }
-        .fail { color: red; }
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1e40af;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-900: #111827;
+            --gradient: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, sans-serif; background: var(--gray-50); color: var(--gray-900); padding: 2rem; max-width: 1200px; margin: 0 auto; }
+        .header { text-align: center; margin-bottom: 2rem; }
+        .logo { font-size: 2rem; font-weight: 700; background: var(--gradient); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .container { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        @media (max-width: 768px) { .container { grid-template-columns: 1fr; } }
+        .card { background: white; border-radius: 0.5rem; padding: 1.5rem; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .card-title { font-size: 1.25rem; font-weight: 600; margin-bottom: 1rem; }
+        .input-field { width: 100%; padding: 10px 15px; border: 1px solid #d1d5db; border-radius: 0.5rem; font-size: 1rem; margin-bottom: 1rem; }
+        .btn { display: inline-flex; align-items: center; justify-content: center; padding: 10px 20px; border: none; border-radius: 0.5rem; font-size: 1rem; font-weight: 500; cursor: pointer; background: var(--gradient); color: white; width: 100%; }
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); }
+        .analysis-box { background: var(--gray-50); border-radius: 0.5rem; padding: 1rem; margin-top: 1rem; border-left: 4px solid var(--primary); }
+        .hidden { display: none; }
+        .progress-bar { height: 12px; background: var(--gray-100); border-radius: 0.5rem; overflow: hidden; margin: 1rem 0; }
+        .progress-fill { height: 100%; background: var(--gradient); border-radius: 0.5rem; width: 12%; }
     </style>
 </head>
 <body>
-    <h1>🧪 Urban Thread AI Flow Test</h1>
+    <header class="header">
+        <div class="logo">🏢 Urban Thread AI Training</div>
+        <div class="subtitle">Institutional-Grade Stock Analysis Training Platform</div>
+    </header>
     
-    <div class="test">
-        <h3>Test 1: Button exists</h3>
-        <button id="testBtn" onclick="runTest()">Run Test Flow</button>
-        <div id="result1"></div>
+    <div class="progress-container">
+        <div style="display: flex; justify-content: space-between; font-size: 0.875rem; color: #374151;">
+            <span>Progress: <strong id="current-count">11</strong>/100 corrections</span>
+            <span>Goal: Institutional-Grade AI</span>
+        </div>
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-bar"></div>
+        </div>
     </div>
     
-    <div class="test">
-        <h3>Test 2: analyzeStock function</h3>
-        <div id="result2"></div>
-    </div>
-    
-    <div class="test">
-        <h3>Test 3: Mock data</h3>
-        <div id="result3"></div>
+    <div class="container">
+        <div class="card">
+            <h2 class="card-title">📈 Analyze Stock with Rex</h2>
+            <input type="text" id="tickerInput" class="input-field" placeholder="AAPL, TSLA, NVDA, MSFT" value="NVDA">
+            <button class="btn" onclick="analyzeStock()" id="analyzeBtn">
+                <span id="analyze-text">Run Rex Analysis</span>
+            </button>
+            
+            <div id="analysisResult" class="hidden">
+                <div class="analysis-box">
+                    <h3 style="margin-bottom: 10px;">🤖 AI Analysis Result</h3>
+                    <div id="analysisContent"></div>
+                    <button class="btn" onclick="showCorrectionForm()" style="margin-top: 15px; background: #6b7280;">
+                        ✏️ Spot an Error? Correct AI
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title">✏️ Capture Correction</h2>
+            <div id="correctionForm" class="hidden">
+                <input type="text" id="correctionTicker" class="input-field" readonly>
+                <select id="ruleType" class="input-field">
+                    <option value="">Select rule category</option>
+                    <option value="TREND-GUARD">TREND-GUARD</option>
+                    <option value="VALUATION-GUARD">VALUATION-GUARD</option>
+                    <option value="D/E Context">D/E Context</option>
+                </select>
+                <textarea id="mistake" class="input-field" rows="3" placeholder="AI's mistake..."></textarea>
+                <textarea id="correction" class="input-field" rows="3" placeholder="Your correction..."></textarea>
+                <button class="btn" onclick="saveCorrection()">💾 Save Correction</button>
+            </div>
+            <div id="noAnalysisMessage">
+                <p style="color: #374151; text-align: center; padding: 20px;">
+                    First analyze a stock using Rex, then correct any errors here.
+                </p>
+            </div>
+        </div>
     </div>
     
     <script>
-        function runTest() {
-            // Test 1: Button
-            document.getElementById('result1').innerHTML = 
-                '<span class="pass">✅ Button click registered</span>';
-            
-            // Test 2: analyzeStock function
-            if (typeof analyzeStock === 'function') {
-                document.getElementById('result2').innerHTML = 
-                    '<span class="pass">✅ analyzeStock() function exists</span>';
-                // Run it
-                document.getElementById('tickerInput').value = 'AAPL';
-                analyzeStock();
-            } else {
-                document.getElementById('result2').innerHTML = 
-                    '<span class="fail">❌ analyzeStock() not found</span>';
-            }
-            
-            // Test 3: Mock data
-            if (typeof getMockRexAnalysis === 'function') {
-                document.getElementById('result3').innerHTML = 
-                    '<span class="pass">✅ Mock data function exists</span>';
-            } else {
-                document.getElementById('result3').innerHTML = 
-                    '<span class="fail">❌ Mock data function missing</span>';
-            }
+        // State
+        let corrections = JSON.parse(localStorage.getItem('utCorrections') || '[]');
+        let currentTicker = '';
+        
+        // Initialize
+        updateProgress();
+        
+        // Update progress display
+        function updateProgress() {
+            document.getElementById('current-count').textContent = corrections.length;
+            document.getElementById('progress-bar').style.width = corrections.length + '%';
         }
         
-        // Auto-run tests
-        setTimeout(runTest, 1000);
-    </script>
-    
-    <!-- Include actual dashboard functions -->
-    <script>
-        // Copy analyzeStock and getMockRexAnalysis from main dashboard
+        // Show toast notification
+        function showToast(title, message) {
+            alert(`✅ ${title}: ${message}`);
+        }
+        
+        // Analyze stock with Rex
         async function analyzeStock() {
-            console.log('TEST: analyzeStock called');
-            const ticker = document.getElementById('tickerInput')?.value || 'NVDA';
-            alert(`TEST: Rex would analyze ${ticker}\nPrice: $167.52 | P/E: 34.09`);
-            document.getElementById('analysisResult').style.display = 'block';
-            document.getElementById('analysisContent').innerHTML = 
-                `<p><strong>TEST ANALYSIS:</strong> ${ticker} shows strong fundamentals.</p>`;
-            return true;
+            const ticker = document.getElementById('tickerInput').value.toUpperCase().trim();
+            if (!ticker) {
+                showToast('Error', 'Please enter a ticker symbol');
+                return;
+            }
+            
+            currentTicker = ticker;
+            const btn = document.getElementById('analyzeBtn');
+            const originalText = btn.innerHTML;
+            btn.innerHTML = 'Analyzing...';
+            btn.disabled = true;
+            
+            try {
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                const analysis = getMockRexAnalysis(ticker);
+                
+                // Display analysis
+                document.getElementById('analysisContent').innerHTML = analysis;
+                document.getElementById('analysisResult').classList.remove('hidden');
+                document.getElementById('correctionTicker').value = ticker;
+                document.getElementById('correctionForm').classList.remove('hidden');
+                document.getElementById('noAnalysisMessage').classList.add('hidden');
+                
+                showToast('Analysis Complete', `Rex analyzed ${ticker}`);
+                
+            } catch (error) {
+                showToast('Error', `Failed to analyze ${ticker}`);
+            } finally {
+                btn.innerHTML = originalText;
+                btn.disabled = false;
+            }
         }
         
-        async function getMockRexAnalysis(ticker) {
-            return `<p>Mock analysis for ${ticker}</p>`;
+        // Mock Rex analysis
+        function getMockRexAnalysis(ticker) {
+            const mockData = {
+                'NVDA': { price: '$167.52', pe: '34.09', technical: '85/100', trend: 'Bullish', recommendation: 'BUY', risk: 'HIGH', analysis: 'NVDA shows strong AI-driven growth with expanding margins. P/E reasonable for growth sector.' },
+                'TSLA': { price: '$175.50', pe: '45.2', technical: '65/100', trend: 'Neutral', recommendation: 'HOLD', risk: 'MEDIUM', analysis: 'TSLA facing margin pressure but maintaining EV leadership.' },
+                'AAPL': { price: '$215.80', pe: '28.3', technical: '82/100', trend: 'Bullish', recommendation: 'BUY', risk: 'LOW', analysis: 'AAPL strong ecosystem with services growth.' },
+                'MSFT': { price: '$425.30', pe: '35.8', technical: '85/100', trend: 'Bullish', recommendation: 'BUY', risk: 'LOW', analysis: 'MSFT Azure growth strong, AI integration across products.' }
+            };
+            
+            const data = mockData[ticker] || {
+                price: '$XXX.XX', pe: 'XX.X', technical: 'XX/100', trend: 'Neutral', recommendation: 'HOLD', risk: 'MEDIUM',
+                analysis: `Analysis for ${ticker} would be generated by Rex AI.`
+            };
+            
+            return `
+                <div style="margin-bottom: 10px;">
+                    <strong>Price:</strong> ${data.price}<br>
+                    <strong>P/E Ratio:</strong> ${data.pe}<br>
+                    <strong>Technical Score:</strong> ${data.technical}<br>
+                    <strong>Trend:</strong> ${data.trend}<br>
+                    <strong>Risk:</strong> ${data.risk}
+                </div>
+                <div style="background: white; padding: 15px; border-radius: 5px; margin-top: 10px;">
+                    <strong>AI Analysis:</strong><br>
+                    ${data.analysis}
+                </div>
+                <div style="margin-top: 10px; padding: 10px; background: #f0f9ff; border-radius: 5px;">
+                    <strong>Recommendation:</strong> ${data.recommendation}
+                </div>`;
         }
+        
+        // Show correction form
+        function showCorrectionForm() {
+            document.getElementById('correctionForm').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Save correction
+        function saveCorrection() {
+            const ticker = document.getElementById('correctionTicker').value;
+            const rule = document.getElementById('ruleType').value;
+            const mistake = document.getElementById('mistake').value;
+            const correction = document.getElementById('correction').value;
+            
+            if (!ticker || !mistake || !correction) {
+                showToast('Error', 'Please fill all fields');
+                return;
+            }
+            
+            const newCorrection = {
+                timestamp: new Date().toISOString(),
+                ticker: ticker,
+                rule: rule || 'General',
+                mistake: mistake,
+                correction: correction
+            };
+            
+            corrections.push(newCorrection);
+            localStorage.setItem('utCorrections', JSON.stringify(corrections));
+            
+            updateProgress();
+            showToast('Correction Saved', `Added to training dataset (${corrections.length}/100)`);
+            
+            // Clear form
+            document.getElementById('mistake').value = '';
+            document.getElementById('correction').value = '';
+        }
+        
+        // Export data
+        function exportData() {
+            const dataStr = JSON.stringify(corrections, null, 2);
+            const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+            const link = document.createElement('a');
+            link.setAttribute('href', dataUri);
+            link.setAttribute('download', 'urban-thread-corrections.json');
+            link.click();
+        }
+        
+        // Add export button
+        document.body.innerHTML += `
+            <div style="text-align: center; margin-top: 2rem;">
+                <button class="btn" onclick="exportData()" style="background: #6b7280; width: auto;">
+                    📥 Export All Corrections
+                </button>
+            </div>`;
     </script>
-    
-    <!-- Dashboard elements -->
-    <input type="text" id="tickerInput" value="NVDA" placeholder="Ticker">
-    <div id="analysisResult" style="display:none; background:#e0f7fa; padding:20px; margin-top:20px;">
-        <div id="analysisContent"></div>
-    </div>
 </body>
 </html>
