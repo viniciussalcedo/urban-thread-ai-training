@@ -1,0 +1,101 @@
+[
+  {
+    "timestamp": "2026-04-02T23:30:00",
+    "ticker": "QQQ",
+    "ai_analysis": "Technical Score: 35/100 - Bearish",
+    "your_correction": "QQQ is an ETF - technicals matter less. Focus on top holdings.",
+    "learned": [
+      "ETFs need different technical analysis"
+    ]
+  },
+  {
+    "timestamp": "2026-04-02T23:31:00",
+    "ticker": "NVDA",
+    "ai_analysis": "High risk - volatility 40%",
+    "your_correction": "Normal volatility for growth tech stocks. Compare to sector.",
+    "learned": [
+      "Adjust risk assessment for sector context"
+    ]
+  },
+  {
+    "timestamp": "2026-04-03T03:05:16.941596",
+    "ticker": "SPY",
+    "ai_analysis": "Technical Score: 40/100 - Bearish",
+    "your_correction": "SPY tracks S&P 500 - index ETFs need different analysis than individual stocks",
+    "learned": [
+      "ETFs need different technical analysis"
+    ]
+  },
+  {
+    "timestamp": "2026-04-03T03:25:26.211366",
+    "ticker": "",
+    "ai_analysis": "",
+    "your_correction": "",
+    "learned": [
+      "Context-specific insight"
+    ]
+  },
+  {
+    "timestamp": "2026-04-03T03:25:31.496343",
+    "ticker": "TSLA",
+    "ai_analysis": "Technical Score: 60/100 - Neutral",
+    "your_correction": "TSLA is growth stock, 60/100 is actually bullish for this sector",
+    "learned": [
+      "Consider sector/industry context"
+    ]
+  },
+  {
+    "timestamp": "2026-04-03T03:27:45.278874",
+    "ticker": "TSLA",
+    "ai_analysis": "Tesla is facing significant short-term headwinds with negative revenue and earnings growth, coupled with a very high valuation. While its financial health remains robust and long-term potential in EVs and AI is undeniable, the current growth deceleration and negative sentiment warrant a cautious HOLD rating. We need to see a clear re-acceleration of growth before recommending a BUY at these multiples.",
+    "your_correction": "TSLA high P/E is normal for growth stocks. Negative growth is temporary due to EV market cycle. AI potential not priced in. Should be BUY not HOLD.",
+    "learned": [
+      "Context-specific insight"
+    ]
+  },
+  {
+    "timestamp": "2026-04-03T14:39:47.960151",
+    "ticker": "",
+    "ai_analysis": "",
+    "your_correction": "",
+    "learned": [
+      "Context-specific insight"
+    ]
+  },
+  {
+    "timestamp": "2026-04-03T14:40:27.694727",
+    "ticker": "NVDA",
+    "ai_analysis": "Called 7.255 D/E \"significant leverage\", called BULLISH despite price below both SMAs, didn't verify suspiciously low forward P/E (15.96 vs typical 25-35x)",
+    "your_correction": "High D/E is buyback-driven equity reduction, not dangerous debt (check Current Ratio 3.14). Forward P/E 15.96 needs source verification - could be stale/non-consensus EPS. Price below both SMAs should trigger TREND-GUARD, capping at HOLD with buyStrength ~50-55, not BULLISH.",
+    "learned": [
+      "Context-specific insight"
+    ]
+  },
+  {
+    "timestamp": "2026-04-03T14:40:51.495120",
+    "ticker": "MSFT",
+    "ai_analysis": "Called MSFT BULLISH/BUY with 90% confidence, ignoring TREND-GUARD rules for Death Cross (SMA50 < SMA200) and price below SMA200",
+    "your_correction": "TREND-GUARD must cap at 45 for Death Cross, forcing HOLD regardless of strong fundamentals. Hierarchy is absolute: trend > valuation > AI output. System shows HOLD at 45, not BUY.",
+    "learned": [
+      "Context-specific insight"
+    ]
+  },
+  {
+    "timestamp": "2026-04-03T14:41:17.567298",
+    "ticker": "TSLA",
+    "ai_analysis": "Said risk \"MEDIUM\" but should be \"HIGH\" (VALUATION-GUARD triggered: P/E 333 > 80). Assumed Death Cross but SMA50 > SMA200. Confidence 70% vs actual 85%. Missing News Sentiment (28) and Technical Score (38).",
+    "your_correction": "VALUATION-GUARD: P/E > 80 forces HIGH risk. No Death Cross (SMA50 > SMA200) = cap at 55 if needed. Raw buyStrength 25 already below cap. System correctly shows SELL at 25, HIGH risk, 85% confidence.",
+    "learned": [
+      "Context-specific insight"
+    ]
+  },
+  {
+    "timestamp": "2026-04-03T14:41:41.349863",
+    "ticker": "SOFI",
+    "ai_analysis": "Shows BUY at 75, BULLISH 65% confidence (raw AI output). Ignores Death Cross (SMA50 < SMA200) and TREND-GUARD.",
+    "your_correction": "Urban Thread applies post-processing guards: TREND-GUARD caps at 45 for Death Cross. Final output is HOLD at 45, 75% confidence with \"Downtrend cap applied\" key factor. Rex needs to show guarded result, not raw AI output.",
+    "learned": [
+      "Context-specific insight"
+    ]
+  }
+]
