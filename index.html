@@ -301,7 +301,7 @@
                 <input type="text" id="tickerInput" class="input-field" placeholder="AAPL, TSLA, NVDA, MSFT" value="NVDA">
             </div>
             
-            <button class="btn btn-primary" onclick="analyzeStock()" style="width: 100%;">
+            <button class="btn btn-primary" onclick="alert("Rex analysis would run here\nIn production: python3 agent-rex-analyzer/analyzer.py "+document.getElementById("tickerInput").value);document.getElementById("analysisResult").style.display="block";" style="width: 100%;">
                 <span id="analyze-text">Run Rex Analysis</span>
                 <span id="analyze-loading" class="loading hidden"></span>
             </button>
